@@ -251,6 +251,13 @@ if minetest.chatcommands["me"] then
 	local old_command = minetest.chatcommands["me"]
 	minetest.override_chatcommand("me", {
 		func = function(name, param)
+			if mute then
+				local muteEntry = mute.find_entry(name) or mute.find_entry(ip)
+				if muteEntry.muted then
+					minetest.chat_send_player(name, "You're muted, you can't /me")
+					return true
+				end
+			end
 			for _, player in pairs(minetest.get_connected_players()) do
 				local rname = player:get_player_name()
 
